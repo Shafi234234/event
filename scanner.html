@@ -360,7 +360,7 @@
   <canvas id="qrCanvas" style="display:none;"></canvas>
 
   <script>
-    const APPS_SCRIPT_DEFAULT = 'https://script.google.com/macros/s/AKfycbzhBvXmQ5mcd3WREwPSfjA8BCXuMavyA26rbWOKklueZeA0gDCS2EAQxdEumdH4HzWRCw/exec';
+    const APPS_SCRIPT_DEFAULT = 'https://script.google.com/macros/s/AKfycbxYLwGBKpzBXpnqxZ3tfeyBzN3T5GSzqbqT3pW8n6BK27DTCSWq8I8RFA6qY-Aa99D7FA/exec';
     const STORAGE_KEY = 'tno_scanner_script_url';
     const VALIDATED_KEY = 'tno_validated_codes';
     let scriptUrl = '';
@@ -509,19 +509,13 @@
 
       let meta = '';
       if (data) {
-        const isVerified = type === 'valid' || type === 'already';
-        const verifiedBadge = isVerified
-          ? `<div style="margin-bottom:12px;padding:8px 14px;border-radius:999px;background:rgba(134,239,172,0.15);border:1px solid rgba(134,239,172,0.3);text-align:center;font-size:13px;font-weight:700;color:#86efac;letter-spacing:1px;">✅ PAYMENT VERIFIED</div>`
-          : `<div style="margin-bottom:12px;padding:8px 14px;border-radius:999px;background:rgba(252,165,165,0.15);border:1px solid rgba(252,165,165,0.3);text-align:center;font-size:13px;font-weight:700;color:#fca5a5;letter-spacing:1px;">❌ PAYMENT NOT VERIFIED</div>`;
-
         const rows = [
           ['Name', data.name],
           ['Tickets', data.tickets ? `${data.tickets} ticket(s)` : null],
           ['Phone', data.phone],
-          ['TrxID', data.trxID],
           ['Code', data.ticketCode],
         ];
-        meta = verifiedBadge + rows.filter(r => r[1]).map(r =>
+        meta = rows.filter(r => r[1]).map(r =>
           `<div class="result-row"><span>${r[0]}</span><strong>${r[1]}</strong></div>`
         ).join('');
       }
