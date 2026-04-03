@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The No Outsiders</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Math:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Math:wght@700&family=Barlow+Condensed:ital,wght@1,900&family=Bebas+Neue&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <style>
     :root {
@@ -436,13 +436,67 @@
         0 0 14px rgba(88,28,135,0.18);
     }
 
-    h2 {
+    h2,
+    .h2-afterdark {
       margin: 0 0 20px;
       text-align: center;
-      font-size: clamp(24px, 4vw, 34px);
-      line-height: 1.05;
-      letter-spacing: 1px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .h2-afterdark .ad-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 5px;
       text-transform: uppercase;
+      color: rgba(192,132,252,0.4);
+      background: none !important;
+      -webkit-text-fill-color: rgba(192,132,252,0.4) !important;
+      text-shadow: none !important;
+      filter: none !important;
+    }
+
+    .h2-afterdark .ad-main {
+      font-family: 'Bebas Neue', 'Inter', sans-serif;
+      font-size: clamp(38px, 8vw, 52px);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(180deg,
+        #fff 0%,
+        #f0e0ff 18%,
+        #c084fc 40%,
+        #9333ea 60%,
+        #4c1d95 82%,
+        #1e0a4a 100%
+      ) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      color: transparent;
+      text-shadow: none !important;
+      filter:
+        drop-shadow(0 1px 0 rgba(255,255,255,0.22))
+        drop-shadow(0 3px 0 rgba(88,28,135,0.9))
+        drop-shadow(0 6px 0 rgba(59,7,100,0.7))
+        drop-shadow(0 10px 0 rgba(30,2,50,0.5))
+        drop-shadow(0 16px 28px rgba(0,0,0,0.65));
+    }
+
+    .h2-afterdark .ad-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: rgba(192,132,252,0.3);
+      background: none !important;
+      -webkit-text-fill-color: rgba(192,132,252,0.3) !important;
+      text-shadow: none !important;
+      filter: none !important;
     }
 
     form {
@@ -978,6 +1032,78 @@
 
     .input-uppercase { text-transform: uppercase; }
 
+    .above-card-brand {
+      text-align: center;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .brand-rule {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .brand-rule-line {
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(192,132,252,0.5));
+    }
+
+    .brand-rule-line.right {
+      background: linear-gradient(270deg, transparent, rgba(192,132,252,0.5));
+    }
+
+    .brand-rule-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(192,132,252,0.6);
+      box-shadow: 0 0 8px rgba(167,100,255,0.7);
+    }
+
+    .brand-main-text {
+      font-family: 'Bebas Neue', 'Inter', sans-serif;
+      font-size: clamp(28px, 6vw, 38px);
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(180deg,
+        #ffffff 0%,
+        #f5e8ff 15%,
+        #e0b8ff 30%,
+        #c084fc 48%,
+        #9333ea 66%,
+        #4c1d95 84%,
+        #1e0a4a 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      filter:
+        drop-shadow(0 1px 0 rgba(255,255,255,0.28))
+        drop-shadow(0 3px 0 rgba(88,28,135,0.95))
+        drop-shadow(0 7px 0 rgba(59,7,100,0.75))
+        drop-shadow(0 12px 0 rgba(30,2,50,0.55))
+        drop-shadow(0 18px 30px rgba(0,0,0,0.65));
+    }
+
+    .brand-tagline {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 4.5px;
+      text-transform: uppercase;
+      color: rgba(192,132,252,0.38);
+    }
+
     /* ── Payment method picker ── */
     .payment-method-picker {
       display: grid;
@@ -1136,7 +1262,12 @@
       }
 
       h2 {
-        font-size: 26px;
+        font-size: inherit;
+      }
+
+      .h2-afterdark .ad-main {
+        font-size: clamp(34px, 9vw, 46px);
+        letter-spacing: 4px;
       }
 
       .field:hover,
@@ -1245,9 +1376,21 @@
 
   <div class="layout-shell">
     <div class="wrapper">
+      <div class="above-card-brand">
+        <div class="brand-rule">
+          <div class="brand-rule-line"></div>
+          <div class="brand-rule-dot"></div>
+          <div class="brand-rule-line right"></div>
+        </div>
+        <div class="brand-main-text" id="brandName">THE NO OUTSIDERS</div>
+        <div class="brand-tagline">est. the night</div>
+      </div>
       <div class="card" id="card">
         <div class="card-shine"></div>
-        <h2>Secure Your Entry</h2>
+        <h2 class="h2-afterdark">
+          <span class="ad-eyebrow">— the night begins —</span>
+          <span class="ad-main">AFTER DARK</span>
+        </h2>
 
         <form id="dataForm">
           <div class="field">
@@ -1274,7 +1417,7 @@
           <div class="field">
             <label for="payment">Bkash / Nagad Transaction ID</label>
             <div class="input-shell">
-              <input type="text" id="payment" placeholder="e.g. 8HG23KL9OP" minlength="8" maxlength="20" required class="input-uppercase" />
+              <input type="text" id="payment" placeholder="e.g. 8HG23KL9OP" minlength="8" maxlength="20" pattern=".{8,}" title="Transaction ID must be at least 8 characters" required class="input-uppercase" />
             </div>
             <div class="payment-info-box">
               <div class="payment-info-row">
@@ -1369,7 +1512,7 @@
     </div>
 
     <section class="hero-panel">
-      <div class="hero-kicker" id="brandName">THE NO OUTSIDERS</div>
+      <div class="hero-kicker" id="brandName">3 HOURS OF EDM × BOLLYWOOD</div>
       <h1 class="hero-title" id="heroTitle">Own the Night. Lock Your Entry.</h1>
       <p class="hero-copy" id="heroCopy">A red-black cinematic arrival page built for premium access, fast guest capture, and a high-end event impression before attendees even step inside.</p>
 
@@ -1403,8 +1546,8 @@
           <span class="hero-stat-label">Maximum tickets per form</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-value">Live</span>
-          <span class="hero-stat-label">Instant request capture</span>
+          <span class="hero-stat-value" id="locationDisplay" style="font-size: clamp(14px, 1.6vw, 20px); line-height: 1.2;">—</span>
+          <span class="hero-stat-label">Location</span>
         </div>
         <div class="hero-feature">
           <span class="hero-feature-title">Doors Open</span>
@@ -1420,7 +1563,6 @@
         <div class="hero-meta-pill">Limited Seats</div>
         <div class="hero-meta-pill">Premium Entry</div>
         <div class="hero-meta-pill">Fast Check-In</div>
-        <div class="hero-meta-pill">Black & Red Theme</div>
       </div>
     </section>
   </div>
@@ -1436,6 +1578,7 @@
       maxTickets: 5,
       doorsOpen: '08:00 PM',
       venue: 'Red Room Entry',
+      location: '—',
       eventDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 42 * 60 * 1000 + 18 * 1000)
     };
 
@@ -1460,6 +1603,7 @@
             if (data.maxTickets) EVENT_CONFIG.maxTickets = parseInt(data.maxTickets, 10);
             if (data.doorsOpen)  EVENT_CONFIG.doorsOpen  = data.doorsOpen;
             if (data.venue)      EVENT_CONFIG.venue      = data.venue;
+            if (data.location)   EVENT_CONFIG.location   = data.location;
             if (data.eventDate)  EVENT_CONFIG.eventDate  = new Date(data.eventDate);
           }
           resolve();
@@ -1649,6 +1793,8 @@
       document.getElementById('maxTicketsDisplay').textContent = String(EVENT_CONFIG.maxTickets).padStart(2, '0');
       document.getElementById('doorsOpenDisplay').textContent = EVENT_CONFIG.doorsOpen;
       document.getElementById('venueDisplay').textContent = EVENT_CONFIG.venue;
+      const locEl = document.getElementById('locationDisplay');
+      if (locEl) locEl.textContent = EVENT_CONFIG.location || '—';
       ticketsInput.max = String(EVENT_CONFIG.maxTickets);
       ticketsInput.placeholder = `1 to ${EVENT_CONFIG.maxTickets}`;
       clampTickets();
@@ -1824,6 +1970,14 @@
 
       if (!form.checkValidity()) {
         form.reportValidity();
+        return;
+      }
+
+      const trxVal = document.getElementById('payment').value.trim();
+      if (trxVal.length < 8) {
+        document.getElementById('payment').setCustomValidity('Transaction ID must be at least 8 characters.');
+        form.reportValidity();
+        document.getElementById('payment').setCustomValidity('');
         return;
       }
 
