@@ -87,15 +87,22 @@ section{position:relative;min-height:100vh;display:flex;align-items:center;overf
 @keyframes dsh{0%,100%{left:-60%;}50%{left:160%;}}
 
 /* HERO */
-#hero{flex-direction:column;justify-content:center;padding:0 clamp(32px,9vw,140px);min-height:100vh;}
+#hero{flex-direction:column;justify-content:center;padding:0 clamp(32px,7vw,110px);min-height:100vh;}
 .hatmo{position:absolute;right:-3vw;top:50%;transform:translateY(-50%);font-family:var(--f-display);font-size:clamp(220px,40vw,640px);color:transparent;-webkit-text-stroke:1px rgba(238,221,245,.04);pointer-events:none;line-height:1;user-select:none;filter:blur(1px);letter-spacing:-.02em;}
 .hatmo2{position:absolute;left:-1vw;bottom:-4%;font-family:var(--f-body);font-size:clamp(70px,14vw,210px);color:transparent;-webkit-text-stroke:1px rgba(140,16,64,.04);pointer-events:none;line-height:1;user-select:none;letter-spacing:.18em;font-weight:100;}
 .heyebrow{display:flex;align-items:center;gap:22px;font-family:var(--f-body);font-weight:200;font-style:italic;font-size:clamp(7px,.78vw,9px);letter-spacing:8px;text-transform:uppercase;color:rgba(200,100,200,.85);margin-bottom:clamp(28px,4.5vh,58px);clip-path:inset(0 100% 0 0);}
 .heyebrow::before{content:'';width:36px;height:1px;flex-shrink:0;background:linear-gradient(90deg,rgba(160,32,160,.6),rgba(140,16,64,.3),transparent);}
-.hhead{font-family:var(--f-display);font-size:clamp(42px,12vw,220px);line-height:.9;letter-spacing:.01em;position:relative;overflow:hidden;text-shadow:0 0 200px rgba(140,16,64,.25),0 0 80px rgba(107,16,112,.15),0 3px 0 rgba(0,0,0,.7);}
-.hhead .wd{display:inline-block;overflow:hidden;margin-right:.05em;}
-.hhead .wd span{display:inline-block;transform:translateY(110%);background:linear-gradient(135deg,#ffe8f0 0%,#c060a0 20%,#eeddf5 45%,#8c1040 65%,#6b1070 80%,#eeddf5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hhead .l2{display:block;background:linear-gradient(135deg,#ffe8f0 0%,#c060a0 20%,#eeddf5 45%,#8c1040 65%,#6b1070 80%,#eeddf5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;-webkit-text-stroke:0px transparent;}
+/* HERO heading — stacked vertical */
+#hero .hhead{font-family:var(--f-display);font-size:clamp(56px,13vw,240px);line-height:.88;letter-spacing:-.01em;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:.04em;overflow:visible;}
+#hero .hhead .wd{display:block;overflow:hidden;width:100%;}
+#hero .hhead .wd span{display:block;transform:translateY(110%);background:linear-gradient(135deg,#fff5fa 0%,#e8a0d0 15%,#ffffff 40%,#c060a0 55%,#8c1040 72%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(184,24,85,.35));}
+#hero .hhead .wd:nth-child(2) span{background:linear-gradient(135deg,#eeddf5 0%,#ffffff 30%,#c060c0 55%,#6b1070 75%,#eeddf5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+#hero .hhead .l2{display:block;width:100%;}
+#hero .hhead .l2 .wd span{background:linear-gradient(135deg,#fff0f8 0%,#d080c0 20%,#ffffff 45%,#9c2060 65%,#6b1070 82%,#f0d8f5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 60px rgba(160,32,160,.4));}
+/* CTA heading — centered, inline, original style */
+.cthead{font-family:var(--f-display);font-size:clamp(64px,14vw,210px);line-height:.88;letter-spacing:.02em;display:block;text-align:center;background:linear-gradient(135deg,#ffe8f0 0%,#c060a0 20%,#eeddf5 45%,#8c1040 65%,#6b1070 80%,#eeddf5 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;transform:translateY(36px);margin-bottom:clamp(20px,3.5vh,36px);}
+.cthead .wd{display:inline-block;overflow:hidden;}
+.cthead .wd span{display:inline-block;transform:translateY(0);-webkit-text-fill-color:inherit;background:none;filter:none;}
 .hhead .l2::after{content:attr(data-text);position:absolute;left:.05em;top:0;color:transparent;-webkit-text-stroke:1px var(--rose);opacity:0;pointer-events:none;clip-path:inset(30% 0 40% 0);}
 .hhead .l2.gl::after{animation:hgl .09s steps(2) forwards;}
 .hhead .l2.gl{animation:hgl2 .09s steps(2);}
@@ -375,7 +382,7 @@ h2#cthead .wd span{transform:translateY(0)!important;}
     <div class="heyebrow" id="hey">An Exclusive Experience &nbsp;·&nbsp; Dhaka &nbsp;·&nbsp; 2026</div>
     <h1 class="hhead" id="hhd">
       <div class="wd"><span>Own</span></div>
-      <div class="wd"><span>the</span></div>
+      <div class="wd"><span>The</span></div>
       <div class="l2" data-text="Experience"><div class="wd"><span>Experience</span></div></div>
     </h1>
     <p class="hsub" id="hsb">Where EDM meets Bollywood —<br/>and the night becomes infinite.</p>
@@ -471,7 +478,7 @@ h2#cthead .wd span{transform:translateY(0)!important;}
   <section id="cta" data-s="3">
     <div class="ctag2"><div class="ctag2a"></div><div class="ctag2b"></div></div>
     <div class="cteye" id="cteye">Dhaka · 01 September · 2026 · 20:00</div>
-    <h2 class="cthead hhead" id="cthead"><div class="wd"><span>Own</span></div><br/><div class="wd"><span>The</span></div> <div class="wd"><span>Night</span></div></h2>
+    <h2 class="cthead" id="cthead">Own<br/>The<br/>Night</h2>
     <p class="ctsub" id="ctsub">Because some nights define everything.</p>
     <div class="ctbtns" id="ctbtns">
       <a class="btn btn-p btnl" href="main.html" data-mag><div class="bf"></div><span class="bt">Secure Your Place</span><div class="ba"></div></a>
