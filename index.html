@@ -864,6 +864,9 @@ const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{nav.classList.toggle('s',window.scrollY>50);},{passive:true});
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const id=a.getAttribute('href').slice(1),el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'});}});});
 const wipe=document.getElementById('wipe');
+// Reset wipe on load (fixes back-navigation blank screen)
+if(wipe){wipe.classList.remove('on');void wipe.offsetWidth;}
+window.addEventListener('pageshow',function(e){if(wipe){wipe.classList.remove('on');}});
 document.querySelectorAll('a[href="main.html"]').forEach(l=>{l.addEventListener('click',e=>{e.preventDefault();wipe.classList.add('on');setTimeout(()=>{window.location.href='main.html';},1150);});});
 
 // Countdown with flip animation
