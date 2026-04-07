@@ -1771,7 +1771,20 @@
             if (data.heroCopy)   EVENT_CONFIG.heroCopy   = data.heroCopy;
             if (data.spotsText)  EVENT_CONFIG.spotsText  = data.spotsText;
             if (data.maxTickets) EVENT_CONFIG.maxTickets = parseInt(data.maxTickets, 10);
-            if (data.doorsOpen)  EVENT_CONFIG.doorsOpen  = data.doorsOpen;
+            if (data.doorsOpen) {
+              // Apps Script may send a Date serial string — convert to readable time if needed
+              const raw = data.doorsOpen;
+              if (typeof raw === 'string' && raw.includes('T')) {
+                // ISO date string from Apps Script date serial — extract time portion
+                const d = new Date(raw);
+                EVENT_CONFIG.doorsOpen = d.toLocaleTimeString('en-US', {
+                  hour: '2-digit', minute: '2-digit', hour12: true,
+                  timeZone: 'Asia/Dhaka'
+                });
+              } else {
+                EVENT_CONFIG.doorsOpen = raw;
+              }
+            }
             if (data.venue)      EVENT_CONFIG.venue      = data.venue;
             if (data.location)   EVENT_CONFIG.location   = data.location;
             if (data.eventDate)  EVENT_CONFIG.eventDate  = new Date(data.eventDate);
