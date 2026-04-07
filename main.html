@@ -1599,9 +1599,9 @@
     </div>
 
     <section class="hero-panel">
-      <div class="hero-kicker" id="brandName">3 HOURS OF EDM × BOLLYWOOD</div>
-      <h1 class="hero-title" id="heroTitle">Own the Night. Lock Your Entry.</h1>
-      <p class="hero-copy" id="heroCopy">A red-black cinematic arrival page built for premium access, fast guest capture, and a high-end event impression before attendees even step inside.</p>
+      <div class="hero-kicker" id="brandName">3 HOURS OF CLUB X BOLLYWOOD</div>
+      <h1 class="hero-title" id="heroTitle">WHITE ROOM'</h1>
+      <p class="hero-copy" id="heroCopy">Get ready for a night of nonstop beats, electric vibes, and unforgettable energy. Join us for a rave party filled with neon lights, bass drops, and a dance floor that never sleeps.</p>
 
 
 
@@ -1630,16 +1630,16 @@
           <span class="hero-stat-label">Maximum tickets per form</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-value" id="locationDisplay" style="font-size: clamp(14px, 1.6vw, 20px); line-height: 1.2;">—</span>
+          <span class="hero-stat-value" id="locationDisplay" style="font-size: clamp(14px, 1.6vw, 20px); line-height: 1.2;">Level 4, Khan ABC Tradeplex, House 37, Road 2, Dhanmondi, Dhaka, Bangladesh</span>
           <span class="hero-stat-label">Location</span>
         </div>
         <div class="hero-feature">
           <span class="hero-feature-title">Doors Open</span>
-          <span class="hero-feature-value" id="doorsOpenDisplay">08:00 PM</span>
+          <span class="hero-feature-value" id="doorsOpenDisplay">07:30 PM</span>
         </div>
         <div class="hero-feature">
           <span class="hero-feature-title">Venue Mood</span>
-          <span class="hero-feature-value" id="venueDisplay">Red Room Entry</span>
+          <span class="hero-feature-value" id="venueDisplay">Bruncha Cafe</span>
         </div>
       </div>
 
@@ -1741,15 +1741,15 @@
     var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKluZTb7MrMn0YJg4oHK2MgQNDhqhOVRwIHQAnuVJyiaJiN61TQZAZ4x0GUhER4Suvfg/exec';
 
     const EVENT_CONFIG = {
-      brandName: '3 HOURS OF EDM × BOLLYWOOD',
-      heroTitle: 'Own the Night. Lock Your Entry.',
-      heroCopy: 'A red-black cinematic arrival page built for premium access, fast guest capture, and a high-end event impression before attendees even step inside.',
-      spotsText: 'Only 23 priority spots remaining tonight',
+      brandName: '3 HOURS OF CLUB X BOLLYWOOD',
+      heroTitle: "WHITE ROOM'",
+      heroCopy: 'Get ready for a night of nonstop beats, electric vibes, and unforgettable energy. Join us for a rave party filled with neon lights, bass drops, and a dance floor that never sleeps.',
+      spotsText: 'Only 150 priority spots remaining tonight',
       maxTickets: 5,
-      doorsOpen: '08:00 PM',
-      venue: 'Red Room Entry',
-      location: '—',
-      eventDate: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000 + 42 * 60 * 1000 + 18 * 1000)
+      doorsOpen: '07:30 PM',
+      venue: 'Bruncha Cafe',
+      location: 'Level 4, Khan ABC Tradeplex, House 37, Road 2, Dhanmondi, Dhaka, Dhaka, Bangladesh',
+      eventDate: new Date('2026-04-29T19:30:00')
     };
 
     // Fetch config from Google Sheet Config tab on load using JSONP
@@ -1772,15 +1772,18 @@
             if (data.spotsText)  EVENT_CONFIG.spotsText  = data.spotsText;
             if (data.maxTickets) EVENT_CONFIG.maxTickets = parseInt(data.maxTickets, 10);
             if (data.doorsOpen) {
-              // Apps Script may send a Date serial string — convert to readable time if needed
-              const raw = data.doorsOpen;
-              if (typeof raw === 'string' && raw.includes('T')) {
+              // Apps Script may send a Date serial/ISO string or plain time string
+              const raw = String(data.doorsOpen).trim();
+              if (raw.includes('T') || raw.match(/^\d{4}-\d{2}-\d{2}/)) {
                 // ISO date string from Apps Script date serial — extract time portion
                 const d = new Date(raw);
                 EVENT_CONFIG.doorsOpen = d.toLocaleTimeString('en-US', {
                   hour: '2-digit', minute: '2-digit', hour12: true,
                   timeZone: 'Asia/Dhaka'
                 });
+              } else if (raw.match(/^\d{1,2}:\d{2}(:\d{2})?\s*(AM|PM)$/i)) {
+                // Plain time string like "7:30:00 PM" — strip seconds
+                EVENT_CONFIG.doorsOpen = raw.replace(/:\d{2}(\s*(AM|PM))$/i, '$1').trim();
               } else {
                 EVENT_CONFIG.doorsOpen = raw;
               }
