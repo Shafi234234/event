@@ -420,7 +420,6 @@
     .hero-kicker,
     .hero-title,
     .hero-stat-value,
-    label,
     button,
     .success,
     .hero-meta-pill,
@@ -434,6 +433,16 @@
         0 1px 0 rgba(255,255,255,0.08),
         0 10px 24px rgba(0,0,0,0.34),
         0 0 14px rgba(144,16,64,0.18);
+    }
+
+    label {
+      background: linear-gradient(180deg, #ffffff 0%, #f5c0c8 35%, #e0607a 70%, #c03060 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      filter: drop-shadow(0 0 6px rgba(255,100,140,0.25));
     }
 
     h2,
@@ -1594,10 +1603,7 @@
       <h1 class="hero-title" id="heroTitle">Own the Night. Lock Your Entry.</h1>
       <p class="hero-copy" id="heroCopy">A red-black cinematic arrival page built for premium access, fast guest capture, and a high-end event impression before attendees even step inside.</p>
 
-      <div class="spots-pill">
-        <span class="pulse-dot"></span>
-        <span id="spotsText">Only <span class="spots-number" id="spotsCount">23</span> priority spots remaining</span>
-      </div>
+
 
       <div class="countdown" aria-label="Event countdown">
         <div class="count-box">
