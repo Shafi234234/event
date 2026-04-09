@@ -2242,6 +2242,8 @@
         pNum.setCustomValidity('Must be exactly 3 digits.');
         form.reportValidity();
         pNum.setCustomValidity('');
+        btn.disabled = false;
+        btn.textContent = 'Secure My Spot';
         return;
       }
 
