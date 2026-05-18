@@ -2361,6 +2361,146 @@
     body.squad-join-mode .event-strip,
     body.squad-join-mode .admin-toggle-wrap { display: none !important; }
 
+    /* ── ACCESS GATE ─────────────────────────────────────────────────────
+       Hides ALL site content until the backend has confirmed the access code.
+       Shown as a full-screen overlay so nothing else flashes through. */
+    #accessGate {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: linear-gradient(135deg, #000 0%, #0e000e 55%, #1a001a 80%, #280028 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+    #accessGate.hidden { display: none; }
+    body.access-checking,
+    body.access-blocked { overflow: hidden; }
+    body.access-checking .layout-shell,
+    body.access-checking .event-strip,
+    body.access-checking .admin-toggle-wrap,
+    body.access-blocked .layout-shell,
+    body.access-blocked .event-strip,
+    body.access-blocked .admin-toggle-wrap { display: none !important; }
+
+    .access-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(15, 5, 25, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 18px;
+      padding: 32px 26px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .access-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.6), transparent);
+    }
+
+    /* Loading state — shown briefly while validating */
+    .access-checking-spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid rgba(212, 175, 55, 0.25);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      animation: accessSpin 0.8s linear infinite;
+    }
+    @keyframes accessSpin {
+      to { transform: rotate(360deg); }
+    }
+    .access-checking-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: rgba(212, 175, 55, 0.85);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* Blocked state — shown when code missing/invalid/used */
+    .access-blocked-icon {
+      font-size: 38px;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .access-blocked-title {
+      font-family: 'Bebas Neue', Impact, sans-serif;
+      font-size: 26px;
+      letter-spacing: 3px;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .access-blocked-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: rgba(220, 200, 255, 0.7);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+    .access-blocked-contact {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    .access-contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      background: rgba(212, 175, 55, 0.08);
+      color: #d4af37;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+    .access-contact-btn:hover {
+      background: rgba(212, 175, 55, 0.18);
+      transform: translateY(-1px);
+    }
+    .access-backup-number {
+      margin-top: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      color: rgba(220, 200, 255, 0.55);
+    }
+    .access-backup-number a {
+      color: rgba(212, 175, 55, 0.85);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .access-backup-number a:hover {
+      color: #f4cf57;
+      text-decoration: underline;
+    }
+    .access-admin-note {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(212, 175, 55, 0.2);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: rgba(212, 175, 55, 0.55);
+      text-transform: uppercase;
+    }
+
     .squad-join-card {
       width: 100%;
       max-width: 380px;
@@ -2532,6 +2672,128 @@
   </style>
 </head>
 <body>
+
+  <!-- ══ ACCESS GATE ══ Must run first so nothing else flashes. -->
+  <div id="accessGate">
+    <div class="access-card" id="accessCard">
+      <!-- Checking state (default, hidden once validation completes) -->
+      <div id="accessChecking">
+        <div class="access-checking-spinner"></div>
+        <div class="access-checking-label">Verifying access</div>
+      </div>
+
+      <!-- Blocked state (shown if missing / invalid / used) -->
+      <div id="accessBlocked" style="display:none;">
+        <div class="access-blocked-icon" id="accessBlockedIcon">🔒</div>
+        <div class="access-blocked-title" id="accessBlockedTitle">Access Required</div>
+        <div class="access-blocked-sub" id="accessBlockedSub">
+          This registration link is private. Please complete your payment first and our team will share a personalized link with you.
+        </div>
+        <div class="access-blocked-contact">
+          <a class="access-contact-btn" href="https://wa.me/8801998076384" target="_blank" rel="noopener">💬 WhatsApp</a>
+          <a class="access-contact-btn" href="https://instagram.com/the.nooutsiders" target="_blank" rel="noopener">📷 Instagram</a>
+        </div>
+        <div class="access-backup-number">or message <a href="https://wa.me/8801713388273" target="_blank" rel="noopener">01713388273</a></div>
+        <div class="access-admin-note">The No Outsiders · Private Event</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ══ ACCESS GATE — runs synchronously before any other JS ══
+    // Reads ?access=CODE from URL → hits backend → either reveals page or blocks.
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const accessCode = (params.get('access') || '').trim();
+
+      // Stash on window so the rest of the app can read it (used in submit payload)
+      window.__ACCESS_CODE__ = accessCode;
+
+      // If a squad-join URL is present, the squad flow has its own gate logic.
+      // Access gate doesn't apply to friend-join page — only to the main booking form.
+      if (params.get('squad')) {
+        document.getElementById('accessGate').classList.add('hidden');
+        return;
+      }
+
+      document.body.classList.add('access-checking');
+
+      function showBlocked(opts) {
+        document.body.classList.remove('access-checking');
+        document.body.classList.add('access-blocked');
+        document.getElementById('accessChecking').style.display = 'none';
+        document.getElementById('accessBlocked').style.display = 'block';
+        if (opts.icon)  document.getElementById('accessBlockedIcon').textContent = opts.icon;
+        if (opts.title) document.getElementById('accessBlockedTitle').textContent = opts.title;
+        if (opts.sub)   document.getElementById('accessBlockedSub').textContent = opts.sub;
+      }
+
+      function reveal() {
+        document.body.classList.remove('access-checking');
+        document.getElementById('accessGate').classList.add('hidden');
+        // The rest of main.html now runs normally
+      }
+
+      // No code in URL at all → block immediately
+      if (!accessCode) {
+        showBlocked({
+          icon: '🔒',
+          title: 'Access Required',
+          sub: 'This registration link is private. Please complete your payment first — our team will share a personalized link with you.'
+        });
+        return;
+      }
+
+      // Validate via backend. APPS_SCRIPT_URL is defined later in the page —
+      // but URLSearchParams is synchronous, so we re-derive it from the script tag.
+      // Find the URL from the same constant the rest of the app uses.
+      function startValidation() {
+        const url = (typeof APPS_SCRIPT_URL !== 'undefined')
+          ? APPS_SCRIPT_URL
+          : null;
+        if (!url) {
+          // Constant not loaded yet — retry shortly
+          setTimeout(startValidation, 60);
+          return;
+        }
+        fetch(url + '?action=validateAccess&code=' + encodeURIComponent(accessCode))
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data && data.status === 'valid') {
+              reveal();
+            } else if (data && data.status === 'used') {
+              showBlocked({
+                icon: '⚠️',
+                title: 'Link Already Used',
+                sub: "This access link has already been used. If you didn't complete your booking, contact us and we'll send a fresh link."
+              });
+            } else if (data && data.status === 'missing') {
+              showBlocked({
+                icon: '🔒',
+                title: 'Access Required',
+                sub: 'Your link is missing the access code. Contact us to get a working link.'
+              });
+            } else {
+              // status: 'invalid' or anything else unexpected
+              showBlocked({
+                icon: '🔒',
+                title: 'Invalid Link',
+                sub: "This link isn't valid. If you've paid and didn't receive a working link, message us — we'll fix it right away."
+              });
+            }
+          })
+          .catch(function () {
+            showBlocked({
+              icon: '⚠️',
+              title: 'Connection Issue',
+              sub: "We couldn't verify your link. Check your internet and refresh. If it keeps failing, message us."
+            });
+          });
+      }
+      startValidation();
+    })();
+  </script>
+
   <canvas id="particles"></canvas>
 
   <!-- ══ SQUAD FRIEND-JOIN VIEW (shown only when ?squad=CODE is in the URL) ══ -->
@@ -2755,9 +3017,9 @@
             </div>
           </div>
 
-          <!-- ── No-tier-selected hint (shown if user lands here without ?tier=) ── -->
+          <!-- ── Shown if user lands here without ?tier= (link not from index) ── -->
           <div id="noTierHint" class="no-tier-hint" style="display:none">
-            <a href="index.html">← Choose your tier on the home page</a>
+            <a href="index.html">← Back to the home page</a>
           </div>
 
           <div class="field">
@@ -3240,15 +3502,9 @@
     // ════════════════════════════════════════════════════════════════════════
 
     // Default tier definitions (fallback if sheet is unreachable)
+    // Only one tier active. Other definitions removed in the tier-cut surgery.
     const DEFAULT_TIERS = {
-      regular: { id: 'regular', name: 'REGULAR', price: 800, type: 'standard', lockedSize: null, maxSize: 5 },
-      vip:     { id: 'vip',     name: 'VIP',     price: 1800, type: 'standard', lockedSize: null, maxSize: 5 },
-      couple:  { id: 'couple',  name: 'COUPLE',  price: 1500, type: 'standard', lockedSize: 2 },
-      squad:   {
-        id: 'squad', name: 'SQUAD', type: 'squad',
-        minSize: 5, maxSize: 10, defaultSize: 5,
-        pricePerSize: { 5: 750, 6: 720, 7: 700, 8: 680, 9: 660, 10: 650 }
-      }
+      regular: { id: 'regular', name: 'REGULAR', price: 800, type: 'standard', lockedSize: null, maxSize: 5 }
     };
     let TIER_LIBRARY = JSON.parse(JSON.stringify(DEFAULT_TIERS));
 
@@ -3589,12 +3845,9 @@
       sizeConfetti();
       window.addEventListener('resize', sizeConfetti);
 
-      // Tier-specific palettes and shapes
+      // Tier-specific palettes and shapes (only regular + default needed now)
       const PALETTES = {
         regular: { colors: ['#b070ff', '#8c4ad8', '#c890ec', '#e8d0fc', '#ffffff'], shape: 'rect' },
-        vip:     { colors: ['#d4af37', '#f4cf57', '#fff8c4', '#b08820', '#ffffff'], shape: 'rect' },
-        couple:  { colors: ['#ff6b9d', '#ffc4d6', '#f4748f', '#ffe0eb', '#ffffff'], shape: 'heart' },
-        squad:   { colors: ['#d4af37', '#b070ff', '#8c4ad8', '#c890ec', '#ffffff'], shape: 'rect' },
         default: { colors: ['#b070ff', '#d4af37', '#c890ec', '#ffffff'], shape: 'rect' }
       };
 
@@ -4451,7 +4704,8 @@
         submittedAt: new Date().toISOString(),
         ticketCode: buildTicketCode(),
         verified: 'NO',
-        validatedAt: ''
+        validatedAt: '',
+        accessCode: window.__ACCESS_CODE__ || ''  // burned by backend on success
       };
 
       // ── Squad leader: generate a shareable squad code ──
@@ -4483,6 +4737,24 @@
         }
 
         // Step 2: submit
+        // Pre-flight re-check the access code (in case it expired since page load).
+        // This is a best-effort guard against edge cases — the backend also re-checks.
+        if (window.__ACCESS_CODE__) {
+          try {
+            const accessRecheck = await fetch(
+              APPS_SCRIPT_URL + '?action=validateAccess&code=' +
+              encodeURIComponent(window.__ACCESS_CODE__)
+            ).then(r => r.json()).catch(() => null);
+            if (accessRecheck && accessRecheck.status !== 'valid') {
+              errorMsg.textContent = '✖ Your access link is no longer valid — please contact us for a new link.';
+              errorMsg.style.display = 'block';
+              btn.textContent = 'Secure My Spot';
+              btn.disabled = false;
+              return;
+            }
+          } catch (_) { /* if recheck fails, fall through and let backend decide */ }
+        }
+
         btn.textContent = 'Submitting…';
         await submitViaIframe(payload);
         successMsg.style.display = 'block';
