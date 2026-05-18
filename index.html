@@ -1944,10 +1944,376 @@
     }
   }
 
+  /* ═══════════════════ INDEX GATE — code-entry lock screen ═══════════════════
+     Hides ALL site content until a valid access code is entered.
+     Persists in localStorage so refresh / return visits don't re-prompt
+     until the code is finally burned at registration time. */
+  #indexGate {
+    position: fixed;
+    inset: 0;
+    z-index: 9500;
+    overflow: hidden;
+    background: linear-gradient(135deg, #000 0%, #0e000e 55%, #1a001a 80%, #280028 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 18px;
+  }
+  #indexGate.hidden { display: none; }
+  body.locked .top-bar,
+  body.locked .top-brand,
+  body.locked main,
+  body.locked .site-footer,
+  body.locked #ticker,
+  body.locked .ticker-section,
+  body.locked #heroVideo,
+  body.locked #heroVideoTint,
+  body.locked #particles { display: none !important; }
+
+  /* Background ambience inside the gate — subtle floating particles */
+  .igate-ambience {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(176,112,255,0.16), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.08), transparent 60%);
+    animation: igateAmbiencePulse 6s ease-in-out infinite;
+  }
+  @keyframes igateAmbiencePulse {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 1; }
+  }
+
+  .igate-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 460px;
+    text-align: center;
+    padding: 36px 24px 30px;
+    background: rgba(15, 5, 25, 0.55);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 22px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .igate-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 24px; right: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.55), transparent);
+  }
+
+  .igate-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: rgba(212, 175, 55, 0.85);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    font-weight: 700;
+  }
+  .igate-title {
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: clamp(36px, 9vw, 52px);
+    letter-spacing: 5px;
+    color: #fff;
+    margin: 0 0 12px;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.25);
+  }
+  .igate-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    color: rgba(220, 200, 255, 0.7);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .igate-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: rgba(255, 245, 230, 0.85);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+  .igate-info-dot {
+    width: 4px; height: 4px; border-radius: 50%;
+    background: rgba(212,175,55,0.7);
+  }
+
+  .igate-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .igate-input-wrap {
+    position: relative;
+  }
+  .igate-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    background: rgba(8, 0, 16, 0.6);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .igate-input::placeholder {
+    color: rgba(220, 200, 255, 0.35);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  .igate-input:focus {
+    outline: none;
+    border-color: rgba(212, 175, 55, 0.7);
+    background: rgba(15, 5, 25, 0.8);
+  }
+  .igate-input.error {
+    border-color: rgba(255, 107, 107, 0.7);
+    animation: igateShake 0.4s ease-out;
+  }
+  @keyframes igateShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .igate-submit {
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #3b2406, #6b4410, #3b2406);
+    border: 1px solid rgba(212, 175, 55, 0.6);
+    color: #d4af37;
+    font-family: 'Bebas Neue', Impact, sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.12);
+    transition: all 0.2s ease;
+  }
+  .igate-submit:hover:not(:disabled) {
+    color: #f4cf57;
+    box-shadow: 0 0 28px rgba(212, 175, 55, 0.3);
+    transform: translateY(-1px);
+  }
+  .igate-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .igate-feedback {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    min-height: 18px;
+    margin-top: 4px;
+    color: rgba(255, 130, 130, 0.95);
+    transition: opacity 0.2s ease;
+  }
+  .igate-feedback.checking { color: rgba(220, 200, 255, 0.7); }
+  .igate-feedback.success { color: rgba(150, 230, 180, 0.95); }
+
+  .igate-footer {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed rgba(212, 175, 55, 0.15);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(220, 200, 255, 0.6);
+    letter-spacing: 0.5px;
+  }
+  .igate-footer a {
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+  .igate-footer a:hover {
+    color: #f4cf57;
+    text-decoration: underline;
+  }
+  .igate-brandline {
+    margin-top: 18px;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: rgba(212, 175, 55, 0.5);
+    text-transform: uppercase;
+  }
+
+  /* Help footer that appears on the unlocked site — small WhatsApp link near copyright */
+  .help-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: rgba(220, 200, 255, 0.55);
+    margin-top: 8px;
+  }
+  .help-line a {
+    color: rgba(212, 175, 55, 0.85);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .help-line a:hover { color: #f4cf57; text-decoration: underline; }
+
 </style>
 </head>
-<body>
+<body class="locked">
 
+<!-- ═══════════════════ INDEX GATE ═══════════════════
+     Code-entry lock. Hides the whole site until a valid code is entered.
+     Persists via localStorage until the code is burned at registration. -->
+<div id="indexGate" role="dialog" aria-modal="true" aria-label="Enter access code">
+  <div class="igate-ambience" aria-hidden="true"></div>
+  <div class="igate-card">
+    <div class="igate-eyebrow">The No Outsiders · Presents</div>
+    <h1 class="igate-title">GLASSHOUSE</h1>
+    <div class="igate-tagline">Bollywood breaks meet underground beats</div>
+    <div class="igate-info">
+      <span>Aloki Glass House</span>
+      <span class="igate-info-dot"></span>
+      <span>Jun 10 · 2026</span>
+    </div>
+    <form class="igate-form" id="indexGateForm" autocomplete="off">
+      <div class="igate-input-wrap">
+        <input
+          type="text"
+          id="indexGateInput"
+          class="igate-input"
+          placeholder="Enter your access code"
+          maxlength="32"
+          autocapitalize="characters"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <button type="submit" class="igate-submit" id="indexGateSubmit">UNLOCK ↘</button>
+      <div class="igate-feedback" id="indexGateFeedback"></div>
+    </form>
+    <div class="igate-footer">
+      No code? DM us on
+      <a href="https://instagram.com/the.nooutsiders" target="_blank" rel="noopener">@the.nooutsiders</a>
+    </div>
+    <div class="igate-brandline">Private · Invite Only</div>
+  </div>
+</div>
+
+<script>
+  // ═══ INDEX GATE — runs synchronously, gates the whole page ═══════════
+  (function () {
+    var STORAGE_KEY = 'glasshouse_access_code';
+    // Apps Script URL (kept in sync with the one used elsewhere on the page)
+    var GATE_URL = 'https://script.google.com/macros/s/AKfycbx2WEysuk9c1mrHS_kQsWq706XZqhMg3ChwgyTr8-S9x3sOqDuuMMwioQpeq78719sk/exec';
+
+    var gateEl    = document.getElementById('indexGate');
+    var inputEl   = document.getElementById('indexGateInput');
+    var submitEl  = document.getElementById('indexGateSubmit');
+    var feedback  = document.getElementById('indexGateFeedback');
+    var formEl    = document.getElementById('indexGateForm');
+
+    function setFeedback(msg, state) {
+      feedback.textContent = msg || '';
+      feedback.className = 'igate-feedback' + (state ? ' ' + state : '');
+    }
+
+    function unlock(code) {
+      // Persist for the browser; main.html reads the same key
+      try { localStorage.setItem(STORAGE_KEY, code); } catch (_) {}
+      // Stash on window so the existing main.html access-code payload picks it up
+      window.__ACCESS_CODE__ = code;
+      // Reveal the site
+      document.body.classList.remove('locked');
+      gateEl.classList.add('hidden');
+    }
+
+    // Auto-unlock if we already have a stored code (validated last time)
+    var stored = null;
+    try { stored = localStorage.getItem(STORAGE_KEY); } catch (_) {}
+
+    // Also accept ?access=CODE in the URL for backward compatibility with old links
+    var urlParams = new URLSearchParams(window.location.search);
+    var urlCode = (urlParams.get('access') || '').trim();
+
+    function tryAutoUnlock(code) {
+      // Re-validate silently — if the code was burned since last visit, lock again.
+      fetch(GATE_URL + '?action=validateAccess&code=' + encodeURIComponent(code))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.status === 'valid') {
+            unlock(code);
+          } else {
+            // Code burned or invalid — clear the stored copy and stay locked.
+            try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+            inputEl.focus();
+          }
+        })
+        .catch(function () {
+          // Network problem — let them try the stored code by typing it again.
+          inputEl.focus();
+        });
+    }
+
+    if (urlCode) {
+      // URL code wins if present
+      tryAutoUnlock(urlCode);
+    } else if (stored) {
+      tryAutoUnlock(stored);
+    } else {
+      setTimeout(function () { inputEl.focus(); }, 100);
+    }
+
+    formEl.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var code = (inputEl.value || '').trim().toUpperCase();
+      if (!code) {
+        inputEl.classList.add('error');
+        setTimeout(function () { inputEl.classList.remove('error'); }, 500);
+        return;
+      }
+      submitEl.disabled = true;
+      submitEl.textContent = 'CHECKING…';
+      setFeedback('Verifying your code…', 'checking');
+
+      fetch(GATE_URL + '?action=validateAccess&code=' + encodeURIComponent(code))
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.status === 'valid') {
+            setFeedback('Welcome.', 'success');
+            setTimeout(function () { unlock(code); }, 250);
+          } else if (data && data.status === 'used') {
+            setFeedback('This code has already been used.');
+            inputEl.classList.add('error');
+            setTimeout(function () { inputEl.classList.remove('error'); }, 500);
+          } else {
+            setFeedback("That code isn't valid. Check it and try again.");
+            inputEl.classList.add('error');
+            setTimeout(function () { inputEl.classList.remove('error'); }, 500);
+          }
+        })
+        .catch(function () {
+          setFeedback('Connection issue. Refresh and try again.');
+        })
+        .then(function () {
+          submitEl.disabled = false;
+          submitEl.textContent = 'UNLOCK ↘';
+        });
+    });
+  })();
+</script>
 
 <!-- ── Hero video background (1 of 3 picked at random on each load) ── -->
 <video id="heroVideo" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
@@ -2218,6 +2584,9 @@
 
     <div class="footer-copy">
       © 2026 <span class="foot-mark">◆</span> The No Outsiders <span class="foot-mark">◆</span> All rights reserved
+    </div>
+    <div class="help-line">
+      Need urgent help? Message <a href="https://wa.me/8801713388273" target="_blank" rel="noopener">01713388273</a>
     </div>
   </div>
 </footer>
