@@ -4,16 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>The No Outsiders — Choose Your Experience</title>
-<meta name="description" content="One room. No outsiders. Choose your entry tier — Regular, VIP, Couple, or Squad. GLASSHOUSE is an immersive night of EDM meets Bollywood — Dhaka, June 10, 2026." />
+<meta name="description" content="One room. No outsiders. GLASSHOUSE is an immersive night of EDM meets Bollywood — Dhaka, June 10, 2026." />
 <meta property="og:title" content="The No Outsiders — Choose Your Experience" />
-<meta property="og:description" content="Choose your entry tier for GLASSHOUSE — an immersive night of EDM meets Bollywood. Dhaka, June 10, 2026." />
+<meta property="og:description" content="GLASSHOUSE — an immersive night of EDM meets Bollywood. Dhaka, June 10, 2026." />
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://thenooutsiders.github.io/event/poster.jpeg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="The No Outsiders — Choose Your Experience" />
-<meta name="twitter:description" content="Choose your entry tier for GLASSHOUSE — an immersive night of EDM meets Bollywood. Dhaka, June 10, 2026." />
+<meta name="twitter:description" content="GLASSHOUSE — an immersive night of EDM meets Bollywood. Dhaka, June 10, 2026." />
 <meta name="twitter:image" content="https://thenooutsiders.github.io/event/poster.jpeg" />
 <link rel="icon" type="image/png" href="logo.png" />
 
@@ -2229,7 +2229,7 @@
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2WEysuk9c1mrHS_kQsWq706XZqhMg3ChwgyTr8-S9x3sOqDuuMMwioQpeq78719sk/exec';
 
   // Default tiers (used if the sheet doesn't load — page still works)
-  // For Squad: `pricePerSize` maps squad size → price per person
+  // Only Regular remains after the tier-cut surgery.
   const DEFAULT_TIERS = [
     {
       id: 'regular',
@@ -2239,35 +2239,6 @@
       featured: false,
       maxSize: 5,
       perks: ['General entry', 'Dance floor access', '1 welcome drink', 'Coat check']
-    },
-    {
-      id: 'vip',
-      name: 'VIP',
-      price: 1800,
-      priceLabel: 'PER PERSON',
-      featured: true,
-      maxSize: 5,
-      perks: ['Priority entry · skip the line', 'VIP lounge access', '2 premium drinks', 'Reserved seating', 'Meet the DJs']
-    },
-    {
-      id: 'couple',
-      name: 'COUPLE',
-      price: 1500,
-      priceLabel: 'FOR TWO',
-      featured: false,
-      perks: ['Entry for 2 people', '2 welcome drinks', "Couple's photo wall", 'Save ৳100 vs Regular']
-    },
-    {
-      id: 'squad',
-      name: 'SQUAD',
-      type: 'squad',
-      minSize: 5,
-      maxSize: 10,
-      defaultSize: 5,
-      // Per-person price for each squad size (bulk discount)
-      pricePerSize: { 5: 750, 6: 720, 7: 700, 8: 680, 9: 660, 10: 650 },
-      regularPrice: 800, // for savings calculation
-      perks: ['Group entry · 5 to 10 people', 'Reserved squad area', 'Squad photo wall', 'Bigger squad = more savings']
     }
   ];
 
@@ -3119,14 +3090,12 @@
     ];
 
     const TIER_DEFS = [
-      // Weights chosen so the mix feels right for the night.
-      // Regular most common, VIP second, Squad occasional, Couple rarer.
-      { tier: 'regular', weight: 38, phrase: () => 'REGULAR' },
-      { tier: 'regular', weight: 8,  phrase: () => 'REGULAR × ' + (2 + Math.floor(Math.random() * 3)) }, // x2, x3, x4
-      { tier: 'vip',     weight: 22, phrase: () => 'VIP' },
-      { tier: 'vip',     weight: 6,  phrase: () => 'VIP × 2' },
-      { tier: 'couple',  weight: 12, phrase: () => 'COUPLE' },
-      { tier: 'squad',   weight: 14, phrase: () => 'SQUAD OF ' + (5 + Math.floor(Math.random() * 6)) } // 5..10
+      // Only Regular remains after the tier-cut. Mix size variations to keep
+      // the ticker from feeling repetitive (× 2 / × 3 / × 4 entries).
+      { tier: 'regular', weight: 60, phrase: () => 'REGULAR' },
+      { tier: 'regular', weight: 22, phrase: () => 'REGULAR × 2' },
+      { tier: 'regular', weight: 12, phrase: () => 'REGULAR × 3' },
+      { tier: 'regular', weight: 6,  phrase: () => 'REGULAR × 4' }
     ];
     const TIER_WEIGHT_TOTAL = TIER_DEFS.reduce((s, t) => s + t.weight, 0);
 
